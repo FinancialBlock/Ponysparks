@@ -64,3 +64,34 @@
   font-weight: bold;
   margin-top: 40px;
 }
+
+.md-apps-tab {
+  display: none;
+}
+
+.md-apps-tab-sel {
+  display: block;
+}
+
+.md-app-detail {
+  display: block;
+  overflow: hidden;
+}
+
+.md-app-size {
+  font-size: 10px;
+  display: block;
+  opacity: .6;
+  float: left;
+}
+
+.md-app-date {
+  font-size: 10px;
+  display: block;
+  opacity: .6;
+  float: right;
+}
+
+.md-apps-list .mbsc-lv-item {
+  padding-left: 50px;
+}
