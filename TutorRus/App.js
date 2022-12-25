@@ -2,14 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import {
   Alert,
   Pressable,
-  SafeAreaView,
-  Animated,
   StyleSheet,
   Text,
   TextInput,
   View,
   Image,
-  Button,
+
   ScrollView, TouchableOpacity, Modal
 } from 'react-native';
 import React, {useState} from "react";
@@ -17,7 +15,7 @@ import { Linking } from 'react-native';
 import {AntDesign, Ionicons} from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import HelloWorld from './components/HelloWorld';
-import Alerts from './components/Alerts';
+
 
 
 
