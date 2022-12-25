@@ -3,7 +3,7 @@ import {
   Alert,
   Pressable,
   SafeAreaView,
-    Animated,
+  Animated,
   StyleSheet,
   Text,
   TextInput,
@@ -13,9 +13,12 @@ import {
   ScrollView, TouchableOpacity, Modal
 } from 'react-native';
 import React, {useState} from "react";
+import { Linking } from 'react-native';
 import {AntDesign, Ionicons} from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import HelloWorld from './components/HelloWorld';
+import Alerts from './components/Alerts';
+
 
 
 const API_URL = 'http://localhost:3000/api';
@@ -29,15 +32,50 @@ export default function App() {
   const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState('');
+
+
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
 
-  // const [modalVisible, setModalVisible] = useState();
+  async function searchAndDisplayImages(query) {
+    // Make an HTTP request to the OpenAI API to search for images
+    const response = await fetch(`https://api.openai.com/v1/images/search?query=${query}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer YOUR_API_KEY',
+      },
+    });
+    // Get the list of images from the API response
+    const data = await response.json();
+    const images = data.data;
+    return images.map((image) => (
+        <Image
+            source={{ uri: image.url }}
+            style={{ width: 200, height: 200 }}
+        />
+    ));
+  }
+
+
+    // const [modalVisible, setModalVisible] = useState();
   // const toggleModal = () => {
   //   setModalVisible(!modalVisible);
   // };
+  const onSubmit = async () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+    setResult('');
+
+    try {
+      // Search for images using the OpenAI API
+
+
+      // Update the UI with the search results
+
 
 
   const onSubmit = async () => {
@@ -48,12 +86,20 @@ export default function App() {
     setResult('');
     //
     try {
+      const images = await searchAndDisplayImages(subject);
+      setResult(images);
+    } catch (e) {
+      Alert.alert("Couldn't generate ideas", e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
       const response = await fetch(`${API_URL}/question`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ subject, question }),
+        body: JSON.stringify({ subject, question}),
       });
       const data = await response.json();
       setResult(data.result);
@@ -75,12 +121,14 @@ export default function App() {
   }
 
 
+
   const onTryAgain = () => {
     setResult('');
   };
 
   if (modalVisible) {
     return (
+
         <Modal
       animationType="slide"
       transparent={false}
@@ -90,13 +138,15 @@ export default function App() {
       <View style={styles.modalContent}>
           <Text>This is the content of the modal</Text>
         <HelloWorld/>
-          <Pressable onPress={toggleModal} style={styles.button}>
+          <Pressable onPress={toggleModal} style={styles.buttonRight}>
               <Text style={styles.buttonText}>Close</Text>
           </Pressable>
       </View>
   </Modal>
     );
   }
+
+
 
   return (
     <View style={styles.container}>
@@ -117,6 +167,8 @@ export default function App() {
 
 
 
+
+
       <TextInput
           placeholder="Type your question here"
           leftIcon={<AntDesign name="search1" size={24} color="black" />}
@@ -126,10 +178,12 @@ export default function App() {
           onChangeText={setQuestion}
 
       />
+
       <View style={styles.labels}>
             <Text style={styles.label}>Search Subject</Text>
 
-        <Pressable onPress={toggleModal} style={styles.button}>
+
+        <Pressable onPress={toggleModal} style={styles.buttonRight}>
           <Text style={styles.buttonText}>See All</Text>
         </Pressable>
       </View>
@@ -148,7 +202,7 @@ export default function App() {
       <ScrollView horizontal={true} style={styles.loadingContainers}
                   contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
         <TouchableOpacity
-            onPress={() => setSubject('math, Algebra 1, Algebra 2, Calculus, Computer math, Consumer math, Fundamentals of math, Geometry, Integrated math, Math applications, Multivariable calculus, Practical math, Pre-algebra, Pre-calculus, Probability, Quantitative literacy, Statistics, Trigonometry')}
+            onPress={() => setSubject('math, Algebra 1, finance, accounting, options calls and puts, Algebra 2, Calculus, Computer math, Consumer math, Fundamentals of math, Geometry, Integrated math, Math applications, Multivariable calculus, Practical math, Pre-algebra, Pre-calculus, Probability, Quantitative literacy, Statistics, Trigonometry')}
             style={[styles.iconContainer, Math === "math" && { backgroundColor: "#10a37f" },]}
         >
           <Image style={styles.icons} source={require('./maths.png')} />
@@ -165,6 +219,13 @@ export default function App() {
               onPress={() => setSubject('coding, javascript, typescript, react-native, react, python, developing\n ')}
               style={styles.iconContainer}
           >
+            <Image style={styles.icons} source={require('./history-book.png')} />
+            <Text>Story</Text>
+          </TouchableOpacity>
+        <TouchableOpacity
+            onPress={() => setSubject('you are the worlds best author and create stories that truly touch peoples heart. You are an expert at making stories, novels, poems, english, literature, journals, diaries and pictures\n ')}
+            style={styles.iconContainer}
+        >
             <Image style={styles.icons} source={require('./math.png')} />
             <Text>Coding</Text>
           </TouchableOpacity>
@@ -192,15 +253,19 @@ export default function App() {
       </ScrollView>
       <ScrollView style={styles.resultsContainers}>
         <Text style={styles.result}>{result}</Text>
+        <Text style={styles.result}>{result}</Text>
       </ScrollView>
 
+        {/*<Text style={[styles.result, {fontWeight: 'bold'}]}>{result.url}</Text>*/}
+
+
+
+
     </View>
-      <Text style={[styles.result, {fontWeight: 'bold'}]}>{result}</Text>
-
-
       <Pressable onPress={onSubmit} style={styles.button}>
-       <Text style={styles.buttonText}>SEARCH WHIZ</Text>
+        <Text style={styles.buttonText}>SEARCH WHIZ</Text>
       </Pressable>
+
 
 
 
@@ -241,7 +306,20 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     flexDirection: "row",
+    width: "95%",
+    justifyContent: "space-between",
+    alignItems: "center"
+
+  },
+  labelClose: {
+    fontSize: 16,
+    color: "black",
+    fontWeight: "bold",
+    flexDirection: "row",
     width: "100%",
+    backgroundColor: "gray",
+    justifyContent: "center",
+    alignItems: "center"
 
   },
   labelWhiz: {
@@ -286,6 +364,20 @@ const styles = StyleSheet.create({
     marginVertical: 6,
 
   },
+  buttonRight: {
+    marginTop: "auto",
+    padding: 16,
+    textColor: "red",
+    color: "red",
+
+    fontWeight: "light",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+
+
+
+
+  },
   subjectButton: {
     marginTop: "auto",
     backgroundColor: "blue",
@@ -297,8 +389,9 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   buttonText: {
-    color: "white",
+    color: "black",
     fontWeight: "bold",
+
   },
   loadingContainer: {
     alignItems: "center",

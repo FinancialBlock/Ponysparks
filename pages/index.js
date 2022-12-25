@@ -57,12 +57,13 @@ export default function Home() {
                     <option value="history">History</option>
                     <option value="english">English</option>
                     <option value="business">Business</option>
-                    <option value="coding">Coding</option>
+                    <option value="coding, java, fix, github, react-native, react, typescript, python,">Coding</option>
                     <option value="biology">Biology</option>
                     <option value="law">Law</option>
                     <option value="science">Science</option>
                     <option value="airlines">Airlines</option>
                     <option value="discounts, codes, active">Discounts</option>
+                    <option value="cyber security, social media scams, phishing, best practices, educator, robinhood finance, social media marketing, public relations, christmas ">Scams</option>
                     <option value="finance">Finance</option>
                     <option value="nba stats">NBA Stats</option>
                     <option value="openapi">Openapi</option>
