@@ -37,24 +37,6 @@ export default function App() {
     setModalVisible(!modalVisible);
   };
 
-  async function searchAndDisplayImages(query) {
-    // Make an HTTP request to the OpenAI API to search for images
-    const response = await fetch(`https://api.openai.com/v1/images/search?query=${query}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_KEY',
-      },
-    });
-    // Get the list of images from the API response
-    const data = await response.json();
-    const images = data.data;
-    return images.map((image) => (
-        <Image
-            source={{ uri: image.url }}
-            style={{ width: 200, height: 200 }}
-        />
-    ));
-  }
 
 
     // const [modalVisible, setModalVisible] = useState();
@@ -185,16 +167,6 @@ export default function App() {
           <Text style={styles.buttonText}>See All</Text>
         </Pressable>
       </View>
-
-{/*
-      <TextInput
-          placeholder="Subject"
-          keyboardType="numeric"
-          style={styles.input}
-          value={subject.toString()}
-          onChangeText={setSubject}
-      />
-*/}
       <View style={styles.viewContainer}>
 
       <ScrollView horizontal={true} style={styles.loadingContainers}
