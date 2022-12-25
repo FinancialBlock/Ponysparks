@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import {
   Alert,
   Pressable,
@@ -7,23 +6,17 @@ import {
   TextInput,
   View,
   Image,
-
-  ScrollView, TouchableOpacity, Modal
+  ScrollView,
+  TouchableOpacity,
+  Modal,
 } from 'react-native';
-import React, {useState} from "react";
+import React, { useState } from 'react';
 import { Linking } from 'react-native';
-import {AntDesign, Ionicons} from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import HelloWorld from './components/HelloWorld';
 
-
-
-
 const API_URL = 'http://localhost:3000/api';
-
-function Picker(props) {
-  return null;
-}
 
 export default function App() {
   const [subject, setSubject] = useState('');
@@ -31,55 +24,24 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState('');
 
-
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
 
-
-
-    // const [modalVisible, setModalVisible] = useState();
-  // const toggleModal = () => {
-  //   setModalVisible(!modalVisible);
-  // };
   const onSubmit = async () => {
     if (loading) {
       return;
     }
     setLoading(true);
     setResult('');
-
     try {
-      // Search for images using the OpenAI API
-
-
-      // Update the UI with the search results
-
-
-
-  const onSubmit = async () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    setResult('');
-    //
-    try {
-      const images = await searchAndDisplayImages(subject);
-      setResult(images);
-    } catch (e) {
-      Alert.alert("Couldn't generate ideas", e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
       const response = await fetch(`${API_URL}/question`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ subject, question}),
+        body: JSON.stringify({ subject, question }),
       });
       const data = await response.json();
       setResult(data.result);
