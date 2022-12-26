@@ -16,7 +16,8 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import HelloWorld from './components/HelloWorld';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://ponysparks-2afu.vercel.app/pages/api';
+
 
 export default function App() {
   const [subject, setSubject] = useState('');
