@@ -20,7 +20,7 @@ import Cameras from './components/Cameras'
 import ScreenList from "./components/ScreenList";
 
 
-const API_URL = 'https://young-meadow-87531.herokuapp.com/api';
+const API_URL = 'https://whizexplore.herokuapp.com/api';
 
 //const titleRegex = /<title>(.*?)<\/title>/;
 const metaRegex = /<meta.*?content=['"](.*?)['"].*?>/;
