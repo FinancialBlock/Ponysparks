@@ -12,7 +12,6 @@ export default function Home() {
     const [result, setResult] = useState('');
 
 
-
     async function onSubmit(event) {
         event.preventDefault();
         if (loading) {
@@ -28,15 +27,31 @@ export default function Home() {
             body: JSON.stringify({ subject, question }),
         });
         const data = await response.json();
-        setResult(data.result.replaceAll('\n', '<br />'));
+
+        // Parse the result and extract the answer
+        const resultParts = data.result.split(' ');
+        const answerIndex = resultParts.indexOf('is') + 1;
+        const answer = resultParts[answerIndex];
+
+        // Modify the result to include the answer in bold
+        const modifiedResult = resultParts
+            .map((part, i) => {
+                if (i === answerIndex) {
+                    return `<strong>${part}</strong>`;
+                }
+                return part;
+            })
+            .join(' ');
+        setResult(modifiedResult);
+
         setLoading(false);
     }
 
     return (
         <div>
-            <ul id="Rap" className="Rap">
-                <li data-tab="rap" data-selected="true">Rap</li>
-            </ul>
+            {/*<ul id="Rap" className="Rap">*/}
+            {/*    <li data-tab="rap" data-selected="true">Rap</li>*/}
+            {/*</ul>*/}
             <Head>
                 <title>OpenAI Quickstart</title>
                 <link rel="icon" href="/public/dog.png" />

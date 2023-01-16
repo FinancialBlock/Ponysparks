@@ -16,19 +16,40 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import HelloWorld from './components/HelloWorld';
 
-const API_URL = 'https://ponysparks-2afu.vercel.app/pages/api';
+import Cameras from './components/Cameras'
+import ScreenList from "./components/ScreenList";
 
 
-export default function App() {
+const API_URL = 'http://localhost:3000/api';
+
+//const titleRegex = /<title>(.*?)<\/title>/;
+const metaRegex = /<meta.*?content=['"](.*?)['"].*?>/;
+
+export default function App () {
+
   const [subject, setSubject] = useState('');
   const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState('');
 
+
+
+
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
+  const togglesModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+  const links = result.match(linkRegex);
+  const titleRegex = new RegExp("(title)(/s)(:)(/s)(.*)(/n)");
+  const titleRegexResult = links ? result.match(titleRegex) : null;
+  const title = titleRegexResult ? titleRegexResult[1] : '';
+
+
 
   const onSubmit = async () => {
     if (loading) {
@@ -37,6 +58,7 @@ export default function App() {
     setLoading(true);
     setResult('');
     try {
+      // Fetch data from the API
       const response = await fetch(`${API_URL}/question`, {
         method: 'POST',
         headers: {
@@ -45,13 +67,34 @@ export default function App() {
         body: JSON.stringify({ subject, question }),
       });
       const data = await response.json();
-      setResult(data.result);
+      const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+      const links = result.match(linkRegex);
+      // const titleRegex = new RegExp("(title)(/s)(:)(/s)(.*)(/n)");
+      const titleRegexResult = links ? result.match(titleRegex) : null;
+      const title = titleRegexResult ? titleRegexResult[0] : '';
+
+      // Set the title and description variables
+
+      const metaRegexResult = data.result ? data.result.match(metaRegex) : null;
+      const description = metaRegexResult ? metaRegexResult[1] : '';
+      console.log(titleRegexResult);
+      console.log(metaRegexResult);
+      console.log(title);
+
+
+
+
+
+      // Set the result variable
+      setResult(`${question}\n\n${data.result}`);
     } catch (e) {
       Alert.alert("Couldn't generate ideas", e.message);
     } finally {
       setLoading(false);
     }
   };
+
+
 
   if (loading) {
     return (
@@ -73,25 +116,30 @@ export default function App() {
     return (
 
         <Modal
-      animationType="slide"
-      transparent={false}
-      visible={modalVisible}
-      onRequestClose={toggleModal}
-  >
-      <View style={styles.modalContent}>
-          <Text>This is the content of the modal</Text>
-        <HelloWorld/>
-          <Pressable onPress={toggleModal} style={styles.buttonRight}>
+            animationType="slide"
+            transparent={false}
+            visible={modalVisible}
+            onRequestClose={togglesModal}
+        >
+          <View style={styles.modalContent}>
+            <Cameras/>
+            <Text>This is the content of the modal</Text>
+            <HelloWorld/>
+
+            <Pressable onPress={togglesModal} style={styles.buttonRight}>
               <Text style={styles.buttonText}>Close</Text>
-          </Pressable>
-      </View>
-  </Modal>
+            </Pressable>
+          </View>
+        </Modal>
     );
   }
 
 
 
+
+
   return (
+
     <View style={styles.container}>
 
       {/*<Text style={styles.label}>For who is the gift?</Text>*/}
@@ -110,27 +158,39 @@ export default function App() {
 
 
 
-
+      <View style={styles.searchSection}>
 
       <TextInput
           placeholder="Type your question here"
-          leftIcon={<AntDesign name="search1" size={24} color="black" />}
+          rightIcon={<AntDesign name="camera" size={24} color="black" />}
           keyboardType="alphabetical"
           style={styles.input}
           value={question.toString()}
           onChangeText={setQuestion}
 
       />
+        <Pressable
+            style={styles.buttonRight}
+            onPress={() => {
+              navigation.navigate('HelloWorld');
+            }}
+        >
+          <AntDesign style={styles.searchIcon} name="camera" size={24} color="black" />
+        </Pressable>
+
+
+      </View>
+
 
       <View style={styles.labels}>
             <Text style={styles.label}>Search Subject</Text>
-
-
         <Pressable onPress={toggleModal} style={styles.buttonRight}>
           <Text style={styles.buttonText}>See All</Text>
         </Pressable>
       </View>
       <View style={styles.viewContainer}>
+
+
 
       <ScrollView horizontal={true} style={styles.loadingContainers}
                   contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -152,11 +212,11 @@ export default function App() {
               onPress={() => setSubject('coding, javascript, typescript, react-native, react, python, developing\n ')}
               style={styles.iconContainer}
           >
-            <Image style={styles.icons} source={require('./history-book.png')} />
-            <Text>Story</Text>
+            <Image style={styles.icons} source={require('./nursing.png')} />
+            <Text>Nursing</Text>
           </TouchableOpacity>
         <TouchableOpacity
-            onPress={() => setSubject('you are the worlds best author and create stories that truly touch peoples heart. You are an expert at making stories, novels, poems, english, literature, journals, diaries and pictures\n ')}
+            onPress={() => setSubject('Anatomy, Physiology, Chemistry, Biochemistry , Psychology, Developmental , Psychology ,Microbiology\n ')}
             style={styles.iconContainer}
         >
             <Image style={styles.icons} source={require('./math.png')} />
@@ -184,16 +244,47 @@ export default function App() {
           <Text>Science</Text>
         </TouchableOpacity>
       </ScrollView>
-      <ScrollView style={styles.resultsContainers}>
-        <Text style={styles.result}>{result}</Text>
-        <Text style={styles.result}>{result}</Text>
-      </ScrollView>
+        <View style={styles.resultContainers}>
 
-        {/*<Text style={[styles.result, {fontWeight: 'bold'}]}>{result.url}</Text>*/}
+        {result && (
+            <ScrollView style={styles.resultsContainers}>
+              <Text style={styles.linkTitle}>{result}</Text>
+              {links.map((link, index) => {
+                const titleRegexResult = result ? result.match(titleRegex) : null;
+                const title = titleRegexResult ? titleRegexResult[1] : '';
 
+                const metaRegexResult = result ? result.match(metaRegex) : null;
+                const description = metaRegexResult ? metaRegexResult[1] : '';
+                const linkList = links.map((link, title, description, index) => {
+                  return {
+                    title: title,
+                    description: description,
+                    link: link
+                  };
+                });
 
+                return (
 
+                    <Pressable key={index} onPress={() => Linking.openURL(link)}>
 
+                      {linkList.map((link, index) => (
+                          <View key={index} style={styles.linkContainer}>
+                            <Text style={styles.linkTitle}>{link.title}</Text>
+                            <Text style={styles.linkDescription}>{link.description}</Text>
+                            <TouchableOpacity onPress={() => Linking.openURL(link.link)}>
+                              <Text style={styles.linkUrl}>{link.link}</Text>
+                            </TouchableOpacity>
+                          </View>
+                      ))}
+                    </Pressable>
+
+                );
+              })}
+            </ScrollView>
+
+        )}
+
+        </View>
     </View>
       <Pressable onPress={onSubmit} style={styles.button}>
         <Text style={styles.buttonText}>SEARCH WHIZ</Text>
@@ -203,6 +294,7 @@ export default function App() {
 
 
     </View>
+
   );
 }
 
@@ -215,11 +307,10 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 16,
-
     borderColor: "#353740;",
     borderWidth: 1,
     borderRadius: 20,
-    width: '80%',
+    width: '100%',
 
     padding: 16,
     marginTop: 10,
@@ -233,6 +324,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
 
 
+  },
+  link: {
+    fontSize: 16,
+    color: '#0000EE',
+    backgroundColor: 'yellow'
+  },
+  description: {
+    fontSize: 30,
+    color: 'black',
+    backgroundColor: 'blue'
+  },
+  title: {
+    fontSize: 30,
+    color: 'black',
+    backgroundColor: 'green'
   },
   labels: {
     fontSize: 16,
@@ -255,6 +361,9 @@ const styles = StyleSheet.create({
     alignItems: "center"
 
   },
+  modalTitleContainer: {
+    height: "100%",
+  },
   labelWhiz: {
     fontSize: 16,
     color: "black",
@@ -276,6 +385,38 @@ const styles = StyleSheet.create({
 
 
   },
+  linkContainer: {
+    flex: 1,
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  linkTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    backgroundColor: "pink",
+  },
+  linkDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 10,
+
+  },
+  linkUrl: {
+    fontSize: 14,
+    color: 'blue',
+  },
+
+  resultContainers: {
+    padding: 6,
+
+    borderColor: "lightgrey",
+    height: "75%",
+    width: "100%",
+    backgroundColor: "pink",
+  },
+
   selectorContainer: {
     flexDirection: "row",
   },
@@ -307,9 +448,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
 
-
-
-
   },
   subjectButton: {
     marginTop: "auto",
@@ -330,9 +468,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: '100%',
     justifyContent: "center",
-    backgroundColor: "#018CDD",
-    padding: 10,
+    // backgroundColor: "#018CDD",
+    backgroundColor: "pink",
+    padding: 5,
     fontColor: "white",
+
   },
   barContainer: {
     alignItems: "center",
@@ -358,7 +498,8 @@ const styles = StyleSheet.create({
   loadingContainers: {
     flex: 1,
     flexDirection: "row",
-    marginTop: 12,
+    marginTop: 1,
+    backgroundColor: 'blue',
 
 
 
@@ -368,14 +509,27 @@ const styles = StyleSheet.create({
   },
   resultsContainers: {
     padding: 10,
-    marginTop: 10,
+    marginTop: 5,
     borderWidth: 1,
     borderColor: "lightgrey",
     height: "75%",
-    width: "95%",
+    width: "100%",
+    backgroundColor: "red",
 
 
 
+  },
+  searchSection: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "80%",
+    backgroundColor: '#fff',
+    marginTop: 10,
+    marginLeft: 10
+  },
+  searchIcon: {
+    padding: 10,
   },
   titleLoading: {
    fontColor: "white",
@@ -405,6 +559,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 30,
+  },
+  answer: {
+    color: "black",
+    fontWeight: "bold",
   },
   cover: {
     backgroundColor: "rgba(0,0,0,.5)",
