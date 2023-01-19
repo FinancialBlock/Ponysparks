@@ -58,7 +58,7 @@ export default function Home() {
             </Head>
 
             <main className={styles.main}>
-            <h3>TutorRUs💡</h3>
+            <h3>Whiz Explore 💡</h3>
             <form onSubmit={onSubmit}>
                 <label>What subject is your question?</label>
 

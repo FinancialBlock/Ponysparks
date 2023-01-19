@@ -14,7 +14,7 @@ import {
     ScrollView,
     Linking, StyleSheet
 } from "react-native";
-import HelloWorld from "../components/HelloWorld";
+import HelloWorld from "../components/SeeAllFlatList";
 import {AntDesign, FontAwesome, Ionicons} from "@expo/vector-icons";
 
 

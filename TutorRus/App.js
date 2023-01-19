@@ -14,10 +14,12 @@ import React, { useState } from 'react';
 import { Linking } from 'react-native';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-import HelloWorld from './components/HelloWorld';
+import SeeAllFlatList from './components/SeeAllFlatList';
+import ScrollList from './components/ScreenList';
 
-import Cameras from './components/Cameras'
-import ScreenList from "./components/ScreenList";
+import Cameras from './components/Cameras';
+import SubjectList from "./components/SubjectList";
+
 
 
 const API_URL = 'https://whizexplore.herokuapp.com/api';
@@ -35,6 +37,7 @@ export default function App () {
 
 
 
+
   const [modalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -44,12 +47,13 @@ export default function App () {
   };
 
   const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-  const links = result.match(linkRegex);
+  // const links = result.match(linkRegex);
   const titleRegex = new RegExp("(title)(/s)(:)(/s)(.*)(/n)");
   const titleRegexResult = links ? result.match(titleRegex) : null;
-  const title = titleRegexResult ? titleRegexResult[1] : '';
 
 
+  const [links, setLinks] = useState([]);
+  const [title, setTitles] = useState([]);
 
   const onSubmit = async () => {
     if (loading) {
@@ -64,35 +68,24 @@ export default function App () {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ subject, question }),
+        body: JSON.stringify({subject, question}),
       });
       const data = await response.json();
       const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
-      const links = result.match(linkRegex);
-      // const titleRegex = new RegExp("(title)(/s)(:)(/s)(.*)(/n)");
-      const titleRegexResult = links ? result.match(titleRegex) : null;
-      const title = titleRegexResult ? titleRegexResult[0] : '';
-
-      // Set the title and description variables
-
-      const metaRegexResult = data.result ? data.result.match(metaRegex) : null;
-      const description = metaRegexResult ? metaRegexResult[1] : '';
-      console.log(titleRegexResult);
-      console.log(metaRegexResult);
-      console.log(title);
-
-
-
-
-
+      const links = data.result.match(linkRegex);
+      const titleRegex = /title : "(.*)"/g;
+      const titles = data.result.match(titleRegex);
+      setLinks(links);
+      setTitles(titles);
       // Set the result variable
       setResult(`${question}\n\n${data.result}`);
     } catch (e) {
       Alert.alert("Couldn't generate ideas", e.message);
     } finally {
       setLoading(false);
-    }
-  };
+    };
+}
+
 
 
 
@@ -122,9 +115,9 @@ export default function App () {
             onRequestClose={togglesModal}
         >
           <View style={styles.modalContent}>
-            <Cameras/>
+            {/*<Cameras/>*/}
             <Text>This is the content of the modal</Text>
-            <HelloWorld/>
+            <SeeAllFlatList/>
 
             <Pressable onPress={togglesModal} style={styles.buttonRight}>
               <Text style={styles.buttonText}>Close</Text>
@@ -148,7 +141,7 @@ export default function App () {
       {/*  <Text style={styles.selector}>Woman</Text>*/}
       {/*</View>*/}
       <View style={styles.labels}>
-      <Text style={styles.labelWhiz}>WHIZ</Text>
+      <Text style={styles.labelWhiz}>WHIZ EXPLORE</Text>
         <TouchableOpacity style={styles.labelsright}>
          <Ionicons name="notifications-outline" size={24} color="black" />
           <FontAwesome name="connectdevelop" size={24} color="black" />
@@ -187,63 +180,13 @@ export default function App () {
         <Pressable onPress={toggleModal} style={styles.buttonRight}>
           <Text style={styles.buttonText}>See All</Text>
         </Pressable>
+
       </View>
       <View style={styles.viewContainer}>
 
 
 
-      <ScrollView horizontal={true} style={styles.loadingContainers}
-                  contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity
-            onPress={() => setSubject('math, Algebra 1, finance, accounting, options calls and puts, Algebra 2, Calculus, Computer math, Consumer math, Fundamentals of math, Geometry, Integrated math, Math applications, Multivariable calculus, Practical math, Pre-algebra, Pre-calculus, Probability, Quantitative literacy, Statistics, Trigonometry')}
-            style={[styles.iconContainer, Math === "math" && { backgroundColor: "#10a37f" },]}
-        >
-          <Image style={styles.icons} source={require('./maths.png')} />
-          <Text>Math</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={() => setSubject('history, Cultural anthropology, Current events ,European history ,Geography, Global studies, Human geography, International relationsLaw, Macroeconomics, Microeconomics, Modern world studies, Physical anthropology, Political studies, Psychology, Religious studies, Sociology. US government, US history, Women\'s studies, World history, World politics, World religions\n ')}
-            style={styles.iconContainer}
-        >
-          <Image style={styles.icons} source={require('./history-book.png')} />
-          <Text>History</Text>
-        </TouchableOpacity>
-          <TouchableOpacity
-              onPress={() => setSubject('coding, javascript, typescript, react-native, react, python, developing\n ')}
-              style={styles.iconContainer}
-          >
-            <Image style={styles.icons} source={require('./nursing.png')} />
-            <Text>Nursing</Text>
-          </TouchableOpacity>
-        <TouchableOpacity
-            onPress={() => setSubject('Anatomy, Physiology, Chemistry, Biochemistry , Psychology, Developmental , Psychology ,Microbiology\n ')}
-            style={styles.iconContainer}
-        >
-            <Image style={styles.icons} source={require('./math.png')} />
-            <Text>Coding</Text>
-          </TouchableOpacity>
-        <TouchableOpacity
-            onPress={() => setSubject('english, American literature, British literature, Contemporary literature, Creative writing, Communication skills, Debate, English language and composition, English literature and composition, Humanities, Journalism, Literary analysis, Modern literature, Poetry, Popular literature, Rhetoric, Technical writing, Works of Shakespeare, World literature, Written and oral communication')}
-            style={styles.iconContainer}
-        >
-          <Image style={styles.icons} source={require('./literature.png')} />
-          <Text>English</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={() => setSubject('business')}
-            style={styles.iconContainer}
-        >
-          <Image style={styles.icons} source={require('./portfolio.png')} />
-          <Text>Business</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={() => setSubject('science, Anatomy, Agriculture, Astronomy, Biology, Botany, Chemistry, Earth science, Electronics, Environmental science, Environmental studies, Forensic science, Geology , Marine biology, Oceanography, Physical science, Physics, Zoology ')}
-            style={styles.iconContainer}
-        >
-          <Image style={styles.icons} source={require('./atom.png')} />
-          <Text>Science</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      <SubjectList/>
         <View style={styles.resultContainers}>
 
         {result && (
@@ -267,18 +210,17 @@ export default function App () {
 
                     <Pressable key={index} onPress={() => Linking.openURL(link)}>
 
-                      {linkList.map((link, index) => (
-                          <View key={index} style={styles.linkContainer}>
-                            <Text style={styles.linkTitle}>{link.title}</Text>
-                            <Text style={styles.linkDescription}>{link.description}</Text>
-                            <TouchableOpacity onPress={() => Linking.openURL(link.link)}>
-                              <Text style={styles.linkUrl}>{link.link}</Text>
-                            </TouchableOpacity>
+                      {links && links.map((link, index) => (
+                          <View key={index}>
+                            <Text>Link: {link}</Text>
+                            <Text>Title: {title[index]}</Text>
                           </View>
                       ))}
                     </Pressable>
 
+
                 );
+
               })}
             </ScrollView>
 
@@ -288,6 +230,7 @@ export default function App () {
     </View>
       <Pressable onPress={onSubmit} style={styles.button}>
         <Text style={styles.buttonText}>SEARCH WHIZ</Text>
+
       </Pressable>
 
 
@@ -567,6 +510,9 @@ const styles = StyleSheet.create({
   cover: {
     backgroundColor: "rgba(0,0,0,.5)",
 
+  },
+  modalContent: {
+    flex: 1,
   },
 
 });
