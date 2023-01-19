@@ -84,7 +84,7 @@ export default function App () {
     } finally {
       setLoading(false);
     };
-}
+  }
 
 
 
@@ -133,113 +133,111 @@ export default function App () {
 
   return (
 
-    <View style={styles.container}>
+      <View style={styles.container}>
 
-      {/*<Text style={styles.label}>For who is the gift?</Text>*/}
-      {/*<View style={styles.selectorContainer}>*/}
-      {/*  <Text style={styles.selector}>Man</Text>*/}
-      {/*  <Text style={styles.selector}>Woman</Text>*/}
-      {/*</View>*/}
-      <View style={styles.labels}>
-      <Text style={styles.labelWhiz}>WHIZ EXPLORE</Text>
-        <TouchableOpacity style={styles.labelsright}>
-         <Ionicons name="notifications-outline" size={24} color="black" />
-          <FontAwesome name="connectdevelop" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
-
-
-
-      <View style={styles.searchSection}>
-
-      <TextInput
-          placeholder="Type your question here"
-          rightIcon={<AntDesign name="camera" size={24} color="black" />}
-          keyboardType="alphabetical"
-          style={styles.input}
-          value={question.toString()}
-          onChangeText={setQuestion}
-
-      />
-        <Pressable
-            style={styles.buttonRight}
-            onPress={() => {
-              navigation.navigate('HelloWorld');
-            }}
-        >
-          <AntDesign style={styles.searchIcon} name="camera" size={24} color="black" />
-        </Pressable>
-
-
-      </View>
-
-
-      <View style={styles.labels}>
-            <Text style={styles.label}>Search Subject</Text>
-        <Pressable onPress={toggleModal} style={styles.buttonRight}>
-          <Text style={styles.buttonText}>See All</Text>
-        </Pressable>
-
-      </View>
-      <View style={styles.viewContainer}>
+        {/*<Text style={styles.label}>For who is the gift?</Text>*/}
+        {/*<View style={styles.selectorContainer}>*/}
+        {/*  <Text style={styles.selector}>Man</Text>*/}
+        {/*  <Text style={styles.selector}>Woman</Text>*/}
+        {/*</View>*/}
+        <View style={styles.labels}>
+          <Text style={styles.labelWhiz}>WHIZ EXPLORE</Text>
+          <TouchableOpacity style={styles.labelsright}>
+            <Ionicons name="notifications-outline" size={24} color="black" />
+            <FontAwesome name="connectdevelop" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
 
 
-      <SubjectList/>
-        <View style={styles.resultContainers}>
 
-        {result && (
-            <ScrollView style={styles.resultsContainers}>
-              <Text style={styles.linkTitle}>{result}</Text>
-              {links.map((link, index) => {
-                const titleRegexResult = result ? result.match(titleRegex) : null;
-                const title = titleRegexResult ? titleRegexResult[1] : '';
+        <View style={styles.searchSection}>
 
-                const metaRegexResult = result ? result.match(metaRegex) : null;
-                const description = metaRegexResult ? metaRegexResult[1] : '';
-                const linkList = links.map((link, title, description, index) => {
-                  return {
-                    title: title,
-                    description: description,
-                    link: link
-                  };
-                });
+          <TextInput
+              placeholder="Type your question here"
+              rightIcon={<AntDesign name="camera" size={24} color="black" />}
+              keyboardType="alphabetical"
+              style={styles.input}
+              value={question.toString()}
+              onChangeText={setQuestion}
 
-                return (
+          />
+          <Pressable
+              style={styles.buttonRight}
+              onPress={() => {
+                navigation.navigate('HelloWorld');
+              }}
+          >
+            <AntDesign style={styles.searchIcon} name="camera" size={24} color="black" />
+          </Pressable>
 
-                    <Pressable key={index} onPress={() => Linking.openURL(link)}>
-
-                      {links && links.map((link, index) => (
-                          <View key={index}>
-                            <Text>Link: {link}</Text>
-                            <Text>Title: {title[index]}</Text>
-                          </View>
-                      ))}
-                    </Pressable>
-
-
-                );
-
-              })}
-            </ScrollView>
-
-        )}
 
         </View>
-    </View>
-      <Pressable onPress={onSubmit} style={styles.button}>
-        <Text style={styles.buttonText}>SEARCH WHIZ</Text>
-
-      </Pressable>
 
 
+        <View style={styles.labels}>
+          <Text style={styles.label}>Search Subject</Text>
+          <Pressable onPress={toggleModal} style={styles.buttonRight}>
+            <Text style={styles.buttonText}>See All</Text>
+          </Pressable>
+        </View>
+        <View style={styles.viewContainer}>
+          <SubjectList/>
+          <View style={styles.resultContainers}>
+
+            {result && (
+                <ScrollView style={styles.resultsContainers}>
+                  <Text style={styles.linkTitle}>{result}</Text>
+                  {links.map((link, index) => {
+                    const titleRegexResult = result ? result.match(titleRegex) : null;
+                    const title = titleRegexResult ? titleRegexResult[1] : '';
+
+                    const metaRegexResult = result ? result.match(metaRegex) : null;
+                    const description = metaRegexResult ? metaRegexResult[1] : '';
+                    const linkList = links.map((link, title, description, index) => {
+                      return {
+                        title: title,
+                        description: description,
+                        link: link
+                      };
+                    });
+
+                    return (
+
+                        <Pressable>
+                          {links.map((link, index) => (
+                              <View key={index}>
+                                <Pressable onPress={() => Linking.openURL(link)}>
+                                  <Text>Link: {link}</Text>
+                                  <Text>Title: {titles[index]}</Text>
+                                </Pressable>
+                              </View>
+                          ))}
+                        </Pressable>
 
 
-    </View>
+                    );
+
+                  })}
+                </ScrollView>
+
+            )}
+
+          </View>
+        </View>
+        <Pressable onPress={onSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>SEARCH WHIZ</Text>
+
+        </Pressable>
+
+
+
+
+      </View>
 
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -475,7 +473,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   titleLoading: {
-   fontColor: "white",
+    fontColor: "white",
   },
   picker: {
     flex: 1,
