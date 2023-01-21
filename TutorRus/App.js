@@ -22,9 +22,9 @@ import SubjectList from "./components/SubjectList";
 
 
 
-const API_URL = 'https://whizexplore.herokuapp.com/api';
+const API_URL = 'http://localhost:3000/api';
 
-//const titleRegex = /<title>(.*?)<\/title>/;
+// const titleRegex = /<title>(.*?)<\/title>/;
 const metaRegex = /<meta.*?content=['"](.*?)['"].*?>/;
 
 export default function App () {
@@ -74,9 +74,9 @@ export default function App () {
       const linkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
       const links = data.result.match(linkRegex);
       const titleRegex = /title : "(.*)"/g;
-      const titles = data.result.match(titleRegex);
+      const title = data.result.match(titleRegex);
       setLinks(links);
-      setTitles(titles);
+      setTitles(title);
       // Set the result variable
       setResult(`${question}\n\n${data.result}`);
     } catch (e) {
@@ -190,22 +190,12 @@ export default function App () {
                   <Text style={styles.linkTitle}>{result}</Text>
                   {links.map((link, index) => {
                     const titleRegexResult = result ? result.match(titleRegex) : null;
-                    const title = titleRegexResult ? titleRegexResult[1] : '';
-
-                    const metaRegexResult = result ? result.match(metaRegex) : null;
-                    const description = metaRegexResult ? metaRegexResult[1] : '';
-                    const linkList = links.map((link, title, description, index) => {
-                      return {
-                        title: title,
-                        description: description,
-                        link: link
-                      };
-                    });
+                    const titles = titleRegexResult ? titleRegexResult[1] : '';
 
                     return (
 
                         <Pressable>
-                          {links.map((link, index) => (
+                          {links.map((link,index) => (
                               <View key={index}>
                                 <Pressable onPress={() => Linking.openURL(link)}>
                                   <Text>Link: {link}</Text>
@@ -257,10 +247,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   label: {
-    fontSize: 20,
+    fontSize: 15,
     color: "black",
     fontWeight: "bold",
     marginLeft:10,
+    backgroundColor: "blue",
     alignItems: "center",
 
 
@@ -286,6 +277,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     flexDirection: "row",
     width: "95%",
+    height: 15,
     justifyContent: "space-between",
     alignItems: "center"
 
@@ -335,7 +327,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
-    backgroundColor: "pink",
   },
   linkDescription: {
     fontSize: 14,
@@ -354,7 +345,7 @@ const styles = StyleSheet.create({
     borderColor: "lightgrey",
     height: "75%",
     width: "100%",
-    backgroundColor: "pink",
+
   },
 
   selectorContainer: {
@@ -379,11 +370,9 @@ const styles = StyleSheet.create({
 
   },
   buttonRight: {
-    marginTop: "auto",
-    padding: 16,
+    marginTop: 1,
     textColor: "red",
     color: "red",
-
     fontWeight: "light",
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -408,8 +397,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: '100%',
     justifyContent: "center",
-    // backgroundColor: "#018CDD",
-    backgroundColor: "pink",
+    backgroundColor: "#018CDD",
     padding: 5,
     fontColor: "white",
 
@@ -454,7 +442,7 @@ const styles = StyleSheet.create({
     borderColor: "lightgrey",
     height: "75%",
     width: "100%",
-    backgroundColor: "red",
+
 
 
 

@@ -4,7 +4,7 @@ import {Dimensions} from 'react-native';
 
 
 
-const API_URL = 'https://whizexplore.herokuapp.com/api';
+const API_URL = 'http://localhost:3001.com/api';
 
 
 export default function SubjectList() {
@@ -14,6 +14,7 @@ const [question, setQuestion] = useState('');
 const [loading, setLoading] = useState(false);
 const [result, setResult] = useState('');
 const [modalVisible, setModalVisible] = useState(false);
+const [selectedSubject, setSelectedSubject] = useState('');
 
 
     return (
@@ -22,50 +23,66 @@ const [modalVisible, setModalVisible] = useState(false);
             <ScrollView horizontal={true} style={styles.loadingContainers}
                         contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity
-                    onPress={() => setSubject('math, Algebra 1, finance, accounting, options calls and puts, Algebra 2, Calculus, Computer math, Consumer math, Fundamentals of math, Geometry, Integrated math, Math applications, Multivariable calculus, Practical math, Pre-algebra, Pre-calculus, Probability, Quantitative literacy, Statistics, Trigonometry')}
-                    style={[styles.iconContainer, Math === "math" && { backgroundColor: "#10a37f" },]}
+                    onPress={() => {
+                        setSubject('math, Algebra 1, finance, accounting, options calls and puts, Algebra 2, Calculus, Computer math, Consumer math, Fundamentals of math, Geometry, Integrated math, Math applications, Multivariable calculus, Practical math, Pre-algebra, Pre-calculus, Probability, Quantitative literacy, Statistics, Trigonometry');
+                        setSelectedSubject('math');
+                    }}
+                    style={[styles.iconContainer, selectedSubject === "math" && { backgroundColor: "#10a37f" },]}
                 >
                     <Image style={styles.icons} source={require('../../maths.png')} />
                     <Text>Math</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => setSubject('history, Cultural anthropology, Current events ,European history ,Geography, Global studies, Human geography, International relationsLaw, Macroeconomics, Microeconomics, Modern world studies, Physical anthropology, Political studies, Psychology, Religious studies, Sociology. US government, US history, Women\'s studies, World history, World politics, World religions\n ')}
-                    style={styles.iconContainer}
+                    onPress={() => {
+                        setSubject('history, Cultural anthropology, Current events ,European history ,Geography, Global studies, Human geography, International relationsLaw, Macroeconomics, Microeconomics, Modern world studies, Physical anthropology, Political studies, Psychology, Religious studies, Sociology. US government, US history, Women\'s studies, World history, World politics, World religions\n ');
+                        setSelectedSubject('history');
+                    }}
+                    style={[styles.iconContainer, selectedSubject === "history" && { backgroundColor: "#10a37f" },]}
                 >
                     <Image style={styles.icons} source={require('../../history-book.png')} />
                     <Text>History</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => setSubject('coding, javascript, typescript, react-native, react, python, developing\n ')}
-                    style={styles.iconContainer}
+                    onPress={() => {setSubject('coding, javascript, typescript, react-native, react, python, developing\n ');
+                        setSelectedSubject('coding');
+                    }}
+                    style={[styles.iconContainer, selectedSubject === "coding" && { backgroundColor: "#10a37f" },]}
                 >
                     <Image style={styles.icons} source={require('../../nursing.png')} />
                     <Text>Nursing</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => setSubject('Anatomy, Physiology, Chemistry, Biochemistry , Psychology, Developmental , Psychology ,Microbiology\n ')}
-                    style={styles.iconContainer}
+                    onPress={() => {setSubject('Anatomy, Physiology, Chemistry, Biochemistry , Psychology, Developmental , Psychology ,Microbiology\n ');
+                        setSelectedSubject('Anatomy');
+                    }}
+                    style={[styles.iconContainer, selectedSubject === "Anatomy" && { backgroundColor: "#10a37f" },]}
                 >
                     <Image style={styles.icons} source={require('../../math.png')} />
                     <Text>Coding</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => setSubject('english, American literature, British literature, Contemporary literature, Creative writing, Communication skills, Debate, English language and composition, English literature and composition, Humanities, Journalism, Literary analysis, Modern literature, Poetry, Popular literature, Rhetoric, Technical writing, Works of Shakespeare, World literature, Written and oral communication')}
-                    style={styles.iconContainer}
+                    onPress={() => { setSubject('english, American literature, British literature, Contemporary literature, Creative writing, Communication skills, Debate, English language and composition, English literature and composition, Humanities, Journalism, Literary analysis, Modern literature, Poetry, Popular literature, Rhetoric, Technical writing, Works of Shakespeare, World literature, Written and oral communication');
+                        setSelectedSubject('english');
+                    }}
+                    style={[styles.iconContainer, selectedSubject === "english" && { backgroundColor: "#10a37f" },]}
                 >
                     <Image style={styles.icons} source={require('../../literature.png')} />
                     <Text>English</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => setSubject('business')}
-                    style={styles.iconContainer}
+                    onPress={() => { setSubject('business');
+                        setSelectedSubject('business');
+                    }}
+                    style={[styles.iconContainer, selectedSubject === "business" && { backgroundColor: "#10a37f" },]}
                 >
                     <Image style={styles.icons} source={require('../../portfolio.png')} />
                     <Text>Business</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => setSubject('science, Anatomy, Agriculture, Astronomy, Biology, Botany, Chemistry, Earth science, Electronics, Environmental science, Environmental studies, Forensic science, Geology , Marine biology, Oceanography, Physical science, Physics, Zoology ')}
-                    style={styles.iconContainer}
+                    onPress={() => { setSubject('science, Anatomy, Agriculture, Astronomy, Biology, Botany, Chemistry, Earth science, Electronics, Environmental science, Environmental studies, Forensic science, Geology , Marine biology, Oceanography, Physical science, Physics, Zoology ');
+                        setSelectedSubject('science');
+                    }}
+                    style={[styles.iconContainer, selectedSubject === "science" && { backgroundColor: "#10a37f" },]}
                 >
                     <Image style={styles.icons} source={require('../../atom.png')} />
                     <Text>Science</Text>
@@ -78,10 +95,13 @@ const [modalVisible, setModalVisible] = useState(false);
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        marginTop:30
+        height: 90,
+        width: Dimensions.get("window").width,
+        backgroundColor: "white",
+        marginVertical: 10,
+        padding: 10,
+        borderWidth: .5,
+
     },
     labels: {
         fontSize: 16,
@@ -130,8 +150,8 @@ const styles = StyleSheet.create({
     loadingContainers: {
         flex: 1,
         flexDirection: "row",
-        marginTop: 1,
-        backgroundColor: 'blue',
+        height: 50,
+
     },
     resultsContainers: {
         padding: 10,

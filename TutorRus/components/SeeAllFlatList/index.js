@@ -4,7 +4,7 @@ import {Dimensions} from 'react-native';
 
 
 
-const API_URL = 'https://whizexplore.herokuapp.com/api';
+const API_URL = 'https://wh.com/api';
 
 
 export default function SeeAllFlatList() {

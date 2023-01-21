@@ -53,9 +53,19 @@ export default function Home() {
             {/*    <li data-tab="rap" data-selected="true">Rap</li>*/}
             {/*</ul>*/}
             <Head>
-                <title>OpenAI Quickstart</title>
+                <title>Whiz Explore</title>
                 <link rel="icon" href="/public/dog.png" />
             </Head>
+
+
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#explore">Explore</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#profile"><img src="path/to/profile-icon.png" alt="Profile"/></a></li>
+                </ul>
+            </nav>
 
             <main className={styles.main}>
             <h3>Whiz Explore 💡</h3>
