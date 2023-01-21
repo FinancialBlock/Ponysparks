@@ -22,7 +22,7 @@ import SubjectList from "./components/SubjectList";
 
 
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://whizexplore.herokuapp.com/api';
 
 // const titleRegex = /<title>(.*?)<\/title>/;
 const metaRegex = /<meta.*?content=['"](.*?)['"].*?>/;
